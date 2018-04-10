@@ -2,49 +2,57 @@ defmodule Magnetissimo.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :magnetissimo,
-     version: "0.0.1",
-     elixir: "~> 1.2",
-     elixirc_paths: elixirc_paths(Mix.env),
-     compilers: [:phoenix, :gettext] ++ Mix.compilers,
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
-     aliases: aliases(),
-     deps: deps()]
+    [
+      app: :magnetissimo,
+      version: "0.1.0",
+      elixir: "~> 1.5",
+      elixirc_paths: elixirc_paths(Mix.env),
+      compilers: [:phoenix, :gettext] ++ Mix.compilers,
+      start_permanent: Mix.env == :prod,
+      aliases: aliases(),
+      deps: deps()
+    ]
   end
 
   # Configuration for the OTP application.
   #
   # Type `mix help compile.app` for more information.
   def application do
-    [mod: {Magnetissimo, []},
-     applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex, :httpoison, :sizeable]]
+    [
+      mod: {Magnetissimo.Application, []},
+      extra_applications: [:logger, :runtime_tools]
+    ]
   end
 
   # Specifies which paths to compile per environment.
-  defp elixirc_paths(:test), do: ["lib", "web", "test/support"]
-  defp elixirc_paths(_),     do: ["lib", "web"]
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_),     do: ["lib"]
 
   # Specifies your project dependencies.
   #
   # Type `mix help deps` for examples and options.
   defp deps do
-    [{:phoenix, "~> 1.2.1"},
-     {:phoenix_pubsub, "~> 1.0"},
-     {:phoenix_ecto, "~> 3.0"},
-     {:postgrex, ">= 0.0.0"},
-     {:phoenix_html, "~> 2.6"},
-     {:phoenix_live_reload, "~> 1.0", only: :dev},
-     {:gettext, "~> 0.11"},
-     {:cowboy, "~> 1.0"},
-     {:floki, "~> 0.11.0"},
-     {:httpoison, "~> 0.10.0"},
-     {:html_entities, "~> 0.3"},
-     {:distillery, "~> 1.0"},
-     {:scrivener_ecto, "~> 1.0"},
-     {:scrivener_html, "~> 1.1"},
-     {:sizeable, "~> 0.1.5"}]
+    [
+      {:bento, "~> 0.9.2"},
+      {:cowboy, "~> 1.0"},
+      {:distillery, "~> 1.5.2"},
+      {:floki, "~> 0.19.1"},
+      {:gettext, "~> 0.11"},
+      {:hackney, "~> 1.10.1"},
+      {:html_entities, "~> 0.4.0"},
+      {:phoenix, "~> 1.3.0"},
+      {:phoenix_ecto, "~> 3.2"},
+      {:phoenix_html, "~> 2.10"},
+      {:phoenix_live_reload, "~> 1.0", only: :dev},
+      {:phoenix_pubsub, "~> 1.0"},
+      {:poison, "~> 2.0", overried: true},
+      {:postgrex, ">= 0.13.2"},
+      {:scrivener_ecto, "~> 1.3.0"},
+      {:scrivener_html, "~> 1.7.1"},
+      {:sentry, "~> 6.0.5", only: :dev},
+      {:sizeable, "~> 1.0.2"},
+      {:tesla, "~> 0.10.0"}
+    ]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
@@ -54,8 +62,9 @@ defmodule Magnetissimo.Mixfile do
   #
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
-    ["ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
-     "ecto.reset": ["ecto.drop", "ecto.setup"],
-     "test": ["ecto.create --quiet", "ecto.migrate", "test"]]
+    [
+      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+      "ecto.reset": ["ecto.drop", "ecto.setup"]
+    ]
   end
 end

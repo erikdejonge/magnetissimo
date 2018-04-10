@@ -1,38 +1,14 @@
 defmodule Magnetissimo do
-  use Application
+  @moduledoc """
+  Magnetissimo keeps the contexts that define your domain
+  and business logic.
 
-  # See http://elixir-lang.org/docs/stable/elixir/Application.html
-  # for more information on OTP Applications
-  def start(_type, _args) do
-    import Supervisor.Spec
+  Contexts are also responsible for managing your data, regardless
+  if it comes from the database, an external API or others.
+  """
 
-    # Define workers and child supervisors to be supervised
-    children = [
-      # Start the Ecto repository
-      supervisor(Magnetissimo.Repo, []),
-      # Start the endpoint when the application starts
-      supervisor(Magnetissimo.Endpoint, []),
-      # Start your own worker by calling: Magnetissimo.Worker.start_link(arg1, arg2, arg3)
-      worker(Magnetissimo.Crawler.ThePirateBay,      []),
-      worker(Magnetissimo.Crawler.EZTV,              []),
-      worker(Magnetissimo.Crawler.LimeTorrents,      []),
-      worker(Magnetissimo.Crawler.Leetx,             []),
-      worker(Magnetissimo.Crawler.Monova,            []),
-      worker(Magnetissimo.Crawler.TorrentDownloads,  []),
-      worker(Magnetissimo.Crawler.WorldWideTorrents, []),
-      # worker(Magnetissimo.Crawler.Demonoid, []), # Down until Demonoid solve their hosting issues.
-    ]
+  @git_version System.cmd("git", ~w(describe --always --tags HEAD)) |> elem(0) |> String.replace("\n", "")
 
-    # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
-    # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: Magnetissimo.Supervisor]
-    Supervisor.start_link(children, opts)
-  end
 
-  # Tell Phoenix to update the endpoint configuration
-  # whenever the application is updated.
-  def config_change(changed, _new, removed) do
-    Magnetissimo.Endpoint.config_change(changed, removed)
-    :ok
-  end
+  def version, do: @git_version
 end
